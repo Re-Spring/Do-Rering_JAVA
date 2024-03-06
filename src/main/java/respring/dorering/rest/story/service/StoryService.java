@@ -1,30 +1,30 @@
 package respring.dorering.rest.story.service;
 
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Service;
 import respring.dorering.rest.story.entity.Story;
 import respring.dorering.rest.story.repository.StoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.List;
 
-
 @Service
 public class StoryService {
-    @PersistenceContext
-    private final EntityManager entityManager;
-    private final StoryRepository storyRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(StoryService.class);
 
-    public StoryService(EntityManager entityManager, StoryRepository storyRepository) {
-        this.entityManager = entityManager;
-        this.storyRepository = storyRepository;
+    @Autowired
+    private StoryRepository storyRepository;
+
+    public List<Story> getAllStories() {
+        try {
+            List<Story> stories = storyRepository.findAll();
+            return stories;
+        } catch (Exception e) {
+            logger.error("Error while fetching stories", e); // 로그 출력
+            throw e;
+        }
     }
-
-    public List<Story> findAllStory(){
-        return storyRepository.findAll();
-    }
-
-
 }
