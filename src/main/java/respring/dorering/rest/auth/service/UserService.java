@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +19,8 @@ import respring.dorering.rest.auth.entity.User;
 import respring.dorering.rest.auth.exception.CustomException;
 import respring.dorering.rest.auth.jwt.TokenProvider;
 import respring.dorering.rest.auth.repository.UserRepository;
-
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,7 +31,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-//    private final AuthenticationManagerBuilder managerBuilder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
 
@@ -56,12 +59,12 @@ public class UserService {
         // 사용자 ID로 사용자 정보를 레포지토리에서 조회
         Optional<User> optionalUser = userRepository.findByUserId(userDTO.getUserId());
         log.info(String.valueOf(optionalUser));
-        log.info("어디까지 오는지 확인1");
+
         // optionalUser가 존재하는지 (db에 사용자가 있는지) 확인
         if(optionalUser.isPresent()){
             // optional에서 실제 사용자 객체를 가져온다
             User user = optionalUser.get();
-            log.info("어디까지 오는지 확인2");
+
             if(user.getWithdrawalStatus() != null && user.getWithdrawalStatus() == "Y") {
                 throw new CustomException("탈퇴한 회원입니다");
             }
@@ -69,15 +72,35 @@ public class UserService {
             if(!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())){
                 throw new CustomException("잘못된 비밀번호입니다");
             }
-            log.info("어디까지 오는지 확인3");
-            // 사용자 DTO를 인증 토큰으로 변환
-            UsernamePasswordAuthenticationToken authenticationToken = userDTO.toAuthentication();
-            log.info("어디까지 오는지 확인4");
-            log.info(String.valueOf(authenticationToken));
-            // 인증 토큰을 기반으로 사용자를 인증
-//            Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+
+//            // 사용자 권한 설정 (여기서는 예시로 USER 권한 부여)
+//            List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+//            log.info("어디까지 오는지 확인1");
+//            log.info(grantedAuthorities.toString());
+//            // 직접 UserDetails 객체 생성
+//            UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), grantedAuthorities);
+//            log.info("어디까지 오는지 확인2");
+//            log.info(String.valueOf(userDetails));
+//            // UserDetails를 사용하여 Authentication 객체 생성
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//            log.info("어디까지 오는지 확인3");
+//            log.info(String.valueOf(authentication));
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            log.info(authentication.getPrincipal().toString());
+//            log.info(authentication.getAuthorities().toString());
+//            log.info(authentication.getName());
+//            log.info("어디까지 오는지 확인4");
+
+            // ID와 패스워드로 인증 토큰 생성
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUserId(), userDTO.getPassword());
+
+            // 인증 과정 수행
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            log.info("어디까지 오는지 확인5");
+
+            // SecurityContext에 인증 정보 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Token 생성
             return tokenProvider.generateTokenDTO(authentication);
         } else {
             throw new CustomException("해당하는 회원 정보가 존재하지 않습니다");

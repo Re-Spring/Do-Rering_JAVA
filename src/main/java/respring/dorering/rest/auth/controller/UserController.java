@@ -39,6 +39,7 @@ public class UserController {
         log.info("컨트롤러 유저DTO 확인 : {}", userDTO.getUserId());
         log.info("컨트롤러 유저DTO 객체 확인 : {}", userDTO);
         TokenDTO tokenDTO = userService.userLogin(userDTO);
+        log.info("토큰 확인 : {}", tokenDTO);
 
         if(tokenDTO != null) {
                 return ResponseEntity.ok(tokenDTO);
