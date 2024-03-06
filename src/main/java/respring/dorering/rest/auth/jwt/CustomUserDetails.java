@@ -2,7 +2,6 @@ package respring.dorering.rest.auth.jwt;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
@@ -14,6 +13,17 @@ public class CustomUserDetails implements UserDetails {
     private String userVoiceId;
     private String role;
     private Collection<? extends GrantedAuthority> authorities;
+
+    public CustomUserDetails(String userCode, String userName, String userId, String userVoiceId, String role,
+                             String password, Collection<? extends GrantedAuthority> authorities) {
+        this.userCode = userCode;
+        this.userName = userName;
+        this.userId = userId;
+        this.userVoiceId = userVoiceId;
+        this.role = role;
+        this.password = password;
+        this.authorities = authorities;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

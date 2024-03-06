@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import respring.dorering.rest.auth.dto.TokenDTO;
 import respring.dorering.rest.auth.entity.User;
-
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
@@ -36,11 +35,13 @@ public class TokenProvider {
     }
 
     public TokenDTO generateTokenDTO(Authentication authentication){
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String userCode = userDetails.getUserCode();
         String userId = userDetails.getUserId();
         String userVoiceId = userDetails.getUserVoiceId();
         String userRole = userDetails.getRole();
+        String userName = userDetails.getUserName();
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -55,6 +56,7 @@ public class TokenProvider {
                 .claim("userCode", userCode)
                 .claim("userId", userId)
                 .claim("userVoiceId", userVoiceId)
+                .claim("userName", userName)
                 .claim("userRole", userRole)
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(tokenExpiresIn)
