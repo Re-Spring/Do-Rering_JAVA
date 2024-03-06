@@ -44,7 +44,7 @@ public class UserController {
                 return ResponseEntity.ok(tokenDTO);
         } else {
             log.info(String.valueOf(tokenDTO));
-            throw new CustomException("알 수 없는 오류가 발생했습니다.");
+            throw new CustomException("로그인 시도 중 오류가 발생했습니다");
         }
     }
 }
