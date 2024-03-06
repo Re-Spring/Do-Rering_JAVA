@@ -1,35 +1,35 @@
 package respring.dorering.rest.story.entity;
 
-
-
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-
-@Getter
 @Entity
-@Table(name = "fairytale_info")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Story{
+@Table(name = "fairytale_info")
+public class Story {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fairytale_file_code")
     private Integer fairytaleFileCode;
-    @Column(name = "fairytale_code")
+
+    @Column(nullable = false, unique = true)
     private String fairytaleCode;
-    @Column(name = "fairytale_thumb")
+
+    @Column(nullable = false)
     private String fairytaleThumb;
-    @Column(name = "fairytale_story")
+
+    @Column(length = 10000) // 본문의 길이가 길 수 있으므로 적절한 길이 제한 설정
     private String fairytaleStory;
-    @Column(name = "summary")
+
+    @Column(length = 500) // 요약 글이므로 적절한 길이 제한 설정
     private String summary;
-    @Column(name = "fairytale_title")
+
+    @Column(nullable = false)
     private String fairytaleTitle;
-
-    // 생성자, getter 및 setter 생략
-
 }
