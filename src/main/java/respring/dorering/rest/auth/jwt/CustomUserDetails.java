@@ -12,6 +12,7 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private String userName;
     private String userVoiceId;
+    private String role;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override
@@ -62,5 +63,9 @@ public class CustomUserDetails implements UserDetails {
 
     public String getUserVoiceId() {
         return userVoiceId;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

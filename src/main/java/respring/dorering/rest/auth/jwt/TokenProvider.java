@@ -40,6 +40,7 @@ public class TokenProvider {
         String userCode = userDetails.getUserCode();
         String userId = userDetails.getUserId();
         String userVoiceId = userDetails.getUserVoiceId();
+        String userRole = userDetails.getRole();
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -54,6 +55,7 @@ public class TokenProvider {
                 .claim("userCode", userCode)
                 .claim("userId", userId)
                 .claim("userVoiceId", userVoiceId)
+                .claim("userRole", userRole)
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(tokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS512)
