@@ -32,4 +32,7 @@ public class Story {
 
     @Column(nullable = false)
     private String fairytaleTitle;
+
+    @Column(nullable = false)
+    private String fairytaleGenre;
 }

@@ -1,12 +1,9 @@
 package respring.dorering.rest.story.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import respring.dorering.rest.story.entity.Story;
 import respring.dorering.rest.story.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -22,4 +19,12 @@ public class StoryController {
     public List<Story> getAllStories() {
         return storyService.getAllStories();
     }
+
+    // 장르별 동화 목록 조회를 위한 엔드포인트
+    @GetMapping("/genre/{genre}")
+    public List<Story> getStoriesByGenre(@PathVariable String genre) {
+        return storyService.getStoriesByGenre(genre);
+    }
+
+
 }
