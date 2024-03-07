@@ -27,4 +27,9 @@ public class StoryService {
             throw e;
         }
     }
+
+    // 장르별로 동화 목록을 조회하는 메서드
+    public List<Story> getStoriesByGenre(String genre) {
+        return storyRepository.findByFairytaleGenre(genre);
+    }
 }

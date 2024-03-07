@@ -15,6 +15,7 @@ public class StoryDTO {
     private String fairytale_story;
     private String summary;
     private String fairytale_title;
+    private String fairytale_genre;
 
 }
 
