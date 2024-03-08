@@ -3,6 +3,7 @@ package respring.dorering.rest.auth.jwt;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
+import java.util.Date;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -12,16 +13,20 @@ public class CustomUserDetails implements UserDetails {
     private String userName;
     private String userVoiceId;
     private String role;
+    private String phone;
+    private Date enrollDate;
     private Collection<? extends GrantedAuthority> authorities;
 
     public CustomUserDetails(String userCode, String userName, String userId, String userVoiceId, String role,
-                             String password, Collection<? extends GrantedAuthority> authorities) {
+                             String password, String phone, Date enrollDate, Collection<? extends GrantedAuthority> authorities) {
         this.userCode = userCode;
         this.userName = userName;
         this.userId = userId;
         this.userVoiceId = userVoiceId;
         this.role = role;
         this.password = password;
+        this.phone = phone;
+        this.enrollDate = enrollDate;
         this.authorities = authorities;
     }
 
@@ -78,4 +83,8 @@ public class CustomUserDetails implements UserDetails {
     public String getRole() {
         return role;
     }
+
+    public String getPhone() { return phone; }
+
+    public Date getEnrollDate() { return enrollDate; }
 }
