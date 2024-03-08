@@ -28,12 +28,6 @@ public class StoryController {
         return storyService.getStoriesByGenre(genre);
     }
 
-    // 특정 동화 상세 정보 조회 엔드포인트
-    @GetMapping("/{fairytaleFileCode}")
-    public ResponseEntity<Story> getStoryByFairytaleFileCode(@PathVariable Integer fairytaleFileCode) {
-        Optional<Story> story = storyService.getStoryByFairytaleFileCode(fairytaleFileCode);
-        return story.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
 
 }

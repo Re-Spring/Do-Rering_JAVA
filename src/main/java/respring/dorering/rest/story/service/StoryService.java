@@ -34,8 +34,4 @@ public class StoryService {
         return storyRepository.findByFairytaleGenre(genre);
     }
 
-    // 특정 동화 상세 정보를 조회하는 메서드
-    public Optional<Story> getStoryByFairytaleFileCode(Integer fairytaleFileCode) {
-        return storyRepository.findById(fairytaleFileCode);
-    }
 }

@@ -9,13 +9,13 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class StoryDTO {
-    private Integer fairytale_file_code;
-    private String fairytale_code;
-    private String fairytale_thumb;
-    private String fairytale_story;
+    private Integer fairytaleFileCode; // 변경됨
+    private String fairytaleCode; // 변경됨
+    private String fairytaleThumb; // 변경됨
+    private String fairytaleStory; // 변경됨
     private String summary;
-    private String fairytale_title;
-    private String fairytale_genre;
+    private String fairytaleTitle; // 변경됨
+    private String fairytaleGenre; // 변경됨
 
 }
 
