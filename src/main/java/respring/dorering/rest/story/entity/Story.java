@@ -16,23 +16,24 @@ public class Story {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "fairytale_file_code")
     private Integer fairytaleFileCode;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "fairytale_code", nullable = false, unique = true)
     private String fairytaleCode;
 
-    @Column(nullable = false)
+    @Column(name = "fairytale_thumb", nullable = false)
     private String fairytaleThumb;
 
-    @Column(length = 10000) // 본문의 길이가 길 수 있으므로 적절한 길이 제한 설정
+    @Column(name = "fairytale_story", length = 10000)
     private String fairytaleStory;
 
-    @Column(length = 500) // 요약 글이므로 적절한 길이 제한 설정
+    @Column(name = "summary", length = 500)
     private String summary;
 
-    @Column(nullable = false)
+    @Column(name = "fairytale_title", nullable = false)
     private String fairytaleTitle;
 
-    @Column(nullable = false)
+    @Column(name = "fairytale_genre", nullable = false)
     private String fairytaleGenre;
 }
