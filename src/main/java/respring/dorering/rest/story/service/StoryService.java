@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StoryService {
@@ -31,5 +32,10 @@ public class StoryService {
     // 장르별로 동화 목록을 조회하는 메서드
     public List<Story> getStoriesByGenre(String genre) {
         return storyRepository.findByFairytaleGenre(genre);
+    }
+
+    // 특정 동화 상세 정보를 조회하는 메서드
+    public Optional<Story> getStoryByFairytaleFileCode(Integer fairytaleFileCode) {
+        return storyRepository.findById(fairytaleFileCode);
     }
 }

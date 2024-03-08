@@ -10,4 +10,5 @@ import java.util.List;
 public interface StoryRepository extends JpaRepository<Story, Integer> {
     // 장르에 따라 동화 목록을 찾는 메서드
     List<Story> findByFairytaleGenre(String fairytaleGenre);
+
 }
