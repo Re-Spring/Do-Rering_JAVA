@@ -14,6 +14,8 @@ public class TokenDTO {
     private String userName;
     private String userRole;
     private String userVoiceId;
+    private String phone;
+    private String enrollDate;
     private String grantType;
     private String accessToken;
     private Long tokenExpiresIn;

@@ -33,6 +33,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getUserVoiceId(),
                 user.getUserRole(),
                 user.getPassword(),
+                user.getPhone(),
+                user.getEnrollDate(),
                 Collections.singleton(grantedAuthority)
         );
     }
