@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import respring.dorering.rest.auth.dto.TokenDTO;
 import respring.dorering.rest.auth.dto.UserEnrollDTO;
 import respring.dorering.rest.auth.dto.UserIdDTO;
+import respring.dorering.rest.auth.entity.User;
 import respring.dorering.rest.auth.exception.CustomException;
 import respring.dorering.rest.auth.service.UserService;
 
@@ -46,6 +47,39 @@ public class UserController {
         } else {
             log.info(String.valueOf(tokenDTO));
             throw new CustomException("로그인 시도 중 오류가 발생했습니다");
+        }
+    }
+
+    @GetMapping("/findId/{userName}/{phoneNum}")
+    public ResponseEntity<String> findUserId(@PathVariable String userName, @PathVariable String phoneNum) {
+        User user = userService.findUserId(userName, phoneNum);
+        if(user != null && user.getUserId() != null) {
+            log.info(String.valueOf(user));
+            return ResponseEntity.ok(user.getUserId());
+        } else {
+            throw new CustomException("회원 정보를 찾을 수 없습니다");
+        }
+    }
+
+    @GetMapping("/findPw/{userName}/{userId}/{phoneNum}")
+    public ResponseEntity<?> findPassword(@PathVariable String userName, @PathVariable String userId, @PathVariable String phoneNum) {
+        User user = userService.findPassword(userName, userId, phoneNum);
+        if(user != null && user.getUserId() != null) {
+            return ResponseEntity.status(HttpStatus.OK).body("user 확인");
+        } else {
+            throw new CustomException("회원 정보를 찾을 수 없습니다");
+        }
+    }
+
+    @PostMapping("/setPwd")
+    public ResponseEntity<?> setNewPassword(@RequestParam String userId, @RequestParam String newPassword) {
+        log.info(userId, newPassword);
+        try {
+            userService.setNewPassword(userId, newPassword);
+            return ResponseEntity.ok("password 변경 완료");
+        } catch (Exception e) {
+            log.info("비밀번호 찾기 controller 오류 : " + e);
+            throw new CustomException("비밀번호 변경 중 오류가 발생했습니다");
         }
     }
 }
