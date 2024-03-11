@@ -5,8 +5,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.0.41:3306/dorering
+#    url: jdbc:mysql://localhost:3306/dorering
     username: respring
+#    username: root
     password: ReSpring3
+#    password: 1234
   jpa:
     hibernate:
       ddl-auto: none
