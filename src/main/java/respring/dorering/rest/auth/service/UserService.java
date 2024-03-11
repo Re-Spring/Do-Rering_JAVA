@@ -106,4 +106,33 @@ public class UserService {
             throw new CustomException("해당하는 회원 정보가 존재하지 않습니다");
         }
     }
+
+    public User findUserId(String userName, String phoneNum) {
+        try {
+            return userRepository.findUserByUserNameAndPhone(userName, phoneNum);
+        } catch (Exception e){
+            log.error("아이디 찾기 에러 : ", e);
+            throw new CustomException("회원 정보를 찾을 수 없습니다");
+        }
+    }
+
+    public User findPassword(String userName, String userId, String phoneNum) {
+        try {
+            return userRepository.findUserByUserNameAndUserIdAndPhone(userName, userId, phoneNum);
+        } catch (Exception e){
+            log.error("비밀번호 찾기 에러 : ", e);
+            throw new CustomException("회원 정보를 찾을 수 없습니다");
+        }
+    }
+
+    public void setNewPassword(String userId, String newPassword) {
+        try {
+            User user = userRepository.findByUserId(userId).orElseThrow(IllegalArgumentException::new);
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        } catch (Exception e){
+            log.error("비밀번호 변경 에러 : ", e);
+            throw new CustomException("비밀번호 변경 중 오류가 발생했습니다");
+        }
+    }
 }

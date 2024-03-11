@@ -14,4 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.withdrawalStatus IS NULL")
     Optional<User> findByUserId(@Param("userId") String userId);
+
+    @Query("SELECT u FROM User u WHERE u.userName = :userName AND u.phone = :phoneNum")
+    User findUserByUserNameAndPhone(@Param("userName") String userName, @Param("phoneNum") String phoneNum);
+
+    @Query("SELECT u FROM User u WHERE u.userName = :userName AND u.userId = :userId AND u.phone = :phoneNum")
+    User findUserByUserNameAndUserIdAndPhone(@Param("userName") String userName, @Param("userId") String userId, @Param("phoneNum") String phoneNum);
 }

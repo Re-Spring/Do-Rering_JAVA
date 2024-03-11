@@ -76,4 +76,8 @@ public class User {
         this.withdrawalStatus = withdrawalStatus;
         this.withdrawalDate = withdrawalDate;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
