@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import respring.dorering.rest.auth.dto.TokenDTO;
+import respring.dorering.rest.auth.dto.UpdateUserDTO;
 import respring.dorering.rest.auth.dto.UserEnrollDTO;
 import respring.dorering.rest.auth.dto.UserIdDTO;
 import respring.dorering.rest.auth.entity.User;
@@ -82,4 +83,11 @@ public class UserController {
             throw new CustomException("비밀번호 변경 중 오류가 발생했습니다");
         }
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        userService.updateUser(updateUserDTO);
+        return ResponseEntity.ok("User information updated successfully");
+    }
+
 }

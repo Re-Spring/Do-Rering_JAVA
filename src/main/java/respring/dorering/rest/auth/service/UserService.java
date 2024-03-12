@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import respring.dorering.rest.auth.dto.TokenDTO;
+import respring.dorering.rest.auth.dto.UpdateUserDTO;
 import respring.dorering.rest.auth.dto.UserEnrollDTO;
 import respring.dorering.rest.auth.dto.UserIdDTO;
 import respring.dorering.rest.auth.entity.User;
@@ -135,4 +136,16 @@ public class UserService {
             throw new CustomException("비밀번호 변경 중 오류가 발생했습니다");
         }
     }
+
+    public void updateUser(UpdateUserDTO updateDTO) {
+        // String 타입의 userId를 Long 타입으로 변환합니다.
+        Long userId = Long.parseLong(updateDTO.getUserId());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+        user.setUserName(updateDTO.getUserName());
+        user.setPhone(updateDTO.getPhone());
+        userRepository.save(user);
+    }
+
+
 }

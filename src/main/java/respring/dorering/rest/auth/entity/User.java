@@ -1,10 +1,7 @@
 package respring.dorering.rest.auth.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -62,6 +59,8 @@ public class User {
     @Column(name = "withdrawal_date")
     private String withdrawalDate;
 
+
+
     @Builder
     public User(Long userCode, String userId, String password, String userName, String phone,
                 Date enrollDate, String userRole, String userVoiceId, String withdrawalStatus, String withdrawalDate) {
@@ -76,6 +75,16 @@ public class User {
         this.withdrawalStatus = withdrawalStatus;
         this.withdrawalDate = withdrawalDate;
     }
+
+    // Setters
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 
     public void setPassword(String password) {
         this.password = password;
