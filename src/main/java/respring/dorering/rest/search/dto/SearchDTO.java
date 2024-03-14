@@ -17,15 +17,18 @@ public class SearchDTO {
     // 일부 데이터에는 null이 허용되므로, 해당 필드는 nullable 입니다.
     private String summary;
 
+    private String fairytaleCode;
+
     // 기본 생성자입니다. JavaBean 규약에 따라 기본 생성자를 제공해야 합니다.
     public SearchDTO() {
     }
 
     // 모든 필드를 초기화하는 생성자입니다.
-    public SearchDTO(String title, String thumbnail, String summary) {
+    public SearchDTO(String title, String thumbnail, String summary, String fairytaleCode) {
         this.title = title;
         this.thumbnail = thumbnail;
         this.summary = summary;
+        this.fairytaleCode = fairytaleCode;
     }
 
     // title 필드에 대한 getter 메서드입니다.
@@ -58,6 +61,9 @@ public class SearchDTO {
         this.summary = summary;
     }
 
+    public String getFairytaleCode(){return fairytaleCode;}
+
+    public void setFairytaleCode(String fairytaleCode){this.fairytaleCode = fairytaleCode;}
     // toString 메서드는 객체의 문자열 표현을 제공합니다.
     @Override
     public String toString() {
@@ -65,6 +71,7 @@ public class SearchDTO {
                 "title='" + title + '\'' +
                 ", thumbnail='" + thumbnail + '\'' +
                 ", summary='" + summary + '\'' +
+                ", fairytaleCode='" + fairytaleCode + '\'' + // toString 메서드에 fairytaleCode 추가
                 '}';
     }
 

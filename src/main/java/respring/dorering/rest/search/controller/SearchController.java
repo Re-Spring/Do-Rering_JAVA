@@ -1,5 +1,6 @@
 package respring.dorering.rest.search.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import respring.dorering.rest.search.service.SearchService;
 import java.util.List;
 
 // 이 클래스는 검색 요청을 처리하기 위한 컨트롤러입니다.
+@Slf4j
 @RestController
 @RequestMapping("/search")// '/search' 경로로 들어오는 요청을 처리합니다.
 public class SearchController {
@@ -27,6 +29,7 @@ public class SearchController {
     public ResponseEntity<List<SearchDTO>> search(@RequestParam String keyword) {
         // 검색 서비스를 호출하여 검색 결과를 가져옵니다.
         List<SearchDTO> searchResults = searchService.searchByKeyword(keyword);
+        log.info(String.valueOf(searchResults));
         // 결과를 HTTP 응답 본문에 담아 반환합니다.
         return ResponseEntity.ok(searchResults);
     }

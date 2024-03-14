@@ -15,5 +15,6 @@ public interface SearchRepository extends JpaRepository<FairyTale, Long> {
     // 스프링 데이터 JPA는 메서드 이름을 분석하여, 'title' 필드에 'title' 매개변수 값이 포함된 엔티티를 검색하는 쿼리를 자동으로 생성합니다.
     List<FairyTale> findByTitleContaining(String title);
 
+
     // 필요에 따라 추가적인 쿼리 메소드를 정의할 수 있으며, 스프링 데이터 JPA는 메서드 이름 규칙에 따라 적절한 쿼리를 자동으로 생성합니다.
 }

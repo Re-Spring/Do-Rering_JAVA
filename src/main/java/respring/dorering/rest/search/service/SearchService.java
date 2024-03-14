@@ -1,5 +1,6 @@
 package respring.dorering.rest.search.service;
 
+import lombok.extern.slf4j.Slf4j;
 import respring.dorering.rest.search.dto.SearchDTO;
 import respring.dorering.rest.search.entity.FairyTale;
 import respring.dorering.rest.search.repository.SearchRepository;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service // 클래스를 서비스 계층의 컴포넌트로 선언하며, 스프링 컨테이너가 이 클래스의 인스턴스를 빈으로 관리합니다.
 public class SearchService {
 
@@ -22,13 +24,16 @@ public class SearchService {
     public List<SearchDTO> searchByKeyword(String keyword) {
         // 제목에 키워드를 포함하는 모든 동화를 검색합니다.
         List<FairyTale> fairyTales = searchRepository.findByTitleContaining(keyword);
+        log.info(fairyTales.toString());
 
         // 검색 결과를 DTO 리스트로 변환하여 반환합니다.
         return fairyTales.stream()
                 .map(fairyTale -> new SearchDTO(
                         fairyTale.getTitle(),
                         fairyTale.getThumbnail(),
-                        fairyTale.getSummary()))
+                        fairyTale.getSummary(),
+                        fairyTale.getFairytaleCode()))
+
                 .collect(Collectors.toList());
     }
 
