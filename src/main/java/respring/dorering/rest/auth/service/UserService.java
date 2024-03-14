@@ -138,10 +138,8 @@ public class UserService {
     }
 
     public void updateUser(UpdateUserDTO updateDTO) {
-        // String 타입의 userId를 Long 타입으로 변환합니다.
-        Long userId = Long.parseLong(updateDTO.getUserId());
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
+        User user = userRepository.findByUserId(updateDTO.getUserId())
+                .orElseThrow(() -> new CustomException("User not found with userId " + updateDTO.getUserId()));
         user.setUserName(updateDTO.getUserName());
         user.setPhone(updateDTO.getPhone());
         userRepository.save(user);
