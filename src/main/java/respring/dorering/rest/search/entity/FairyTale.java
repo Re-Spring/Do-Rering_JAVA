@@ -14,22 +14,24 @@ public class FairyTale {
 
 
 
-
     @Id // 데이터베이스의 기본 키(primary key)임을 나타냅니다.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본 키 생성 전략을 IDENTITY로 설정합니다.
-    private Long id; // 테이블의 기본 키에 해당하는 필드입니다.
+    @Column(name="fairytale_code", unique = true, nullable = false)
+    private String fairytaleCode;
 
     @Column(name = "fairytale_title") // 실제 데이터베이스 컬럼 이름을 명시합니다.
     private String title; // 동화의 제목을 저장하는 필드입니다.
 
-    @Column(name = "fairytale_story") // 실제 데이터베이스 컬럼 이름을 명시합니다.
-    private String story; // 동화의 스토리를 저장하는 필드입니다.
+    @Column(name = "fairytale_image") // 실제 데이터베이스 컬럼 이름을 명시합니다.
+    private String image; // 동화의 이미지를 저장하는 필드입니다.
 
     @Column(name = "fairytale_thumb") // 실제 데이터베이스 컬럼 이름을 명시합니다.
     private String thumbnail; // 동화의 썸네일 이미지 경로를 저장하는 필드입니다.
 
-    @Column(name = "summary") // 실제 데이터베이스 컬럼 이름을 명시합니다.
+    @Column(name = "fairytale_summary") // 실제 데이터베이스 컬럼 이름을 명시합니다.
     private String summary; // 동화의 요약을 저장하는 필드입니다.
+
+    @Column(name = "fairytale_genre") // 실제 데이터베이스 컬럼 이름을 명시합니다.
+    private String genre; // 동화의 장르 저장하는 필드입니다.
 
     // Getters and Setters ...
     // 각 필드에 대한 getter와 setter 메소드를 생성합니다.
@@ -42,9 +44,11 @@ public class FairyTale {
 
     // 모든 필드를 초기화하는 생성자입니다.
     // 필요에 따라 사용할 수 있지만, JPA에서 엔티티를 생성할 때 기본 생성자를 사용한 후 setter를 통해 값을 설정하는 방식이 일반적입니다.
-    public FairyTale(String title, String story, String thumbnail, String summary) {
+    public FairyTale(String title, String genre, String thumbnail, String summary, String image, String fairytaleCode) {
+        this.fairytaleCode = fairytaleCode;
+        this.genre = genre;
         this.title = title;
-        this.story = story;
+        this.image = image;
         this.thumbnail = thumbnail;
         this.summary = summary;
     }
