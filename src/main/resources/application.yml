@@ -4,14 +4,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-   # url: jdbc:mysql://192.168.0.41:3306/dorering
-#    url: jdbc:mysql://localhost:3306/dorering
-    url: jdbc:mysql://ls-1cbbba9eb8cd1fd863325905431688dd6fa82dba.cfk8mckqasu6.ap-northeast-2.rds.amazonaws.com:3306/dorering
-    #username: respring
-#    username: root
+    url: jdbc:mysql://ls-1cbbba9eb8cd1fd863325905431688dd6fa82dba.cfk8mckqasu6.ap-northeast-2.rds.amazonaws.com/dorering
     username: dbmasteruser
-    #password: ReSpring3
-#    password: 1234
     password: A=SWadBq3MuL_V:It7>maC{y?3:J+17u
   jpa:
     hibernate:
@@ -20,7 +14,7 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
-
+        
 jwt:
   key: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9
   time: 86400000
