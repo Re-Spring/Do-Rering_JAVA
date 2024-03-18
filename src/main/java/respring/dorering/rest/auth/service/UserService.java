@@ -42,27 +42,19 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     public UserIdDTO userEnroll(UserEnrollDTO enrollDTO) {
-        if(userRepository.existsByUserId(enrollDTO.getUserId())){
+        if (userRepository.existsByUserId(enrollDTO.getUserId())) {
             throw new CustomException("이미 등록된 아이디입니다.");
         }
 
         Optional<User> latestWithdrawnUser = userRepository.findLatestWithdrawnByPhone(enrollDTO.getPhone());
-        if (latestWithdrawnUser.isPresent()) {
-            User withdrawnUser = latestWithdrawnUser.get();
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date withdrawalDate = sdf.parse(withdrawnUser.getWithdrawalDate());
-                long diffInMillies = Math.abs(new Date().getTime() - withdrawalDate.getTime());
-                long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-                if (diffInDays < 30) {
-                    throw new CustomException("재가입 가능 기간이 아닙니다. 재가입까지 " + (30 - diffInDays) + "일이 남았습니다.");
-                }
-            } catch (ParseException e) {
-                log.error("날짜 파싱 중 오류 발생", e);
-                throw new CustomException("날짜 처리 중 오류가 발생했습니다.");
+        latestWithdrawnUser.ifPresent(user -> {
+            Date withdrawalDate = user.getWithdrawalDate();
+            long diff = new Date().getTime() - withdrawalDate.getTime();
+            long diffDays = diff / (24 * 60 * 60 * 1000);
+            if (diffDays < 30) {
+                throw new CustomException("재가입 가능 기간이 아닙니다. 재가입까지 " + (30 - diffDays) + "일이 남았습니다.");
             }
-        }
+        });
 
         try {
             User user = User.builder()
@@ -171,14 +163,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // 예시를 위한 userWithdrawal 메서드
     @Transactional
     public void userWithdrawal(String userId) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException("해당하는 회원 정보가 존재하지 않습니다"));
         user.setWithdrawalStatus("Y");
-        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        user.setWithdrawalDate(currentDateTime);
+        user.setWithdrawalDate(new Date()); // 현재 날짜와 시간을 직접 할당
         userRepository.save(user);
     }
 
@@ -191,7 +181,8 @@ public class UserService {
                 });
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    // 스케줄링된 작업으로, 탈퇴한 지 한 달이 지난 사용자를 삭제합니다.
+    @Scheduled(cron = "0 0 0 * * ?")
     public void deleteWithdrawnUsers() {
         userRepository.deleteWithdrawnUsersOlderThanOneMonth();
     }
