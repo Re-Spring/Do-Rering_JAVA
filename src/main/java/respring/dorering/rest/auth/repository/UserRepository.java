@@ -17,8 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByPhone(String phone);
 
     // 사용자 ID로 사용자 정보를 조회합니다. 탈퇴한 사용자는 조회에서 제외됩니다.
-    @Query("SELECT u FROM User u WHERE u.userId = :userId AND u.withdrawalStatus IS NULL or u.withdrawalStatus = 'N'")
-    Optional<User> findByUserId(@Param("userId") String userId);
+    @Query("SELECT u FROM User u WHERE u.userId = :userId AND (u.withdrawalStatus IS NULL or u.withdrawalStatus = 'N')")
+    Optional<User> findByUserId(@Param("userId") String userId );
 
     // 사용자 이름과 전화번호로 사용자 정보를 조회합니다.
     @Query("SELECT u FROM User u WHERE u.userName = :userName AND u.phone = :phoneNum")
