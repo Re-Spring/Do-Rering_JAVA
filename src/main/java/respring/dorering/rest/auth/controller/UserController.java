@@ -90,4 +90,17 @@ public class UserController {
         return ResponseEntity.ok("User information updated successfully");
     }
 
+    @DeleteMapping("/withdrawal/{userId}")
+    public ResponseEntity<?> userWithdrawal(@PathVariable String userId) {
+        userService.userWithdrawal(userId);
+        return ResponseEntity.ok("회원 탈퇴 처리가 완료되었습니다.");
+    }
+
+    @GetMapping("/status/{userId}")
+    public ResponseEntity<?> checkUserStatus(@PathVariable String userId) {
+        return userService.findUserByStatus(userId)
+                .map(user -> ResponseEntity.ok().body(user.getWithdrawalStatus()))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
+    }
+
 }

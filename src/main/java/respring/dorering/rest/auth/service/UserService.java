@@ -2,6 +2,7 @@ package respring.dorering.rest.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,9 +21,14 @@ import respring.dorering.rest.auth.entity.User;
 import respring.dorering.rest.auth.exception.CustomException;
 import respring.dorering.rest.auth.jwt.TokenProvider;
 import respring.dorering.rest.auth.repository.UserRepository;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -36,21 +42,41 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     public UserIdDTO userEnroll(UserEnrollDTO enrollDTO) {
-
-        // userId에 대한 중복 검사
         if(userRepository.existsByUserId(enrollDTO.getUserId())){
             throw new CustomException("이미 등록된 아이디입니다.");
         }
-        // phone에 대한 중복 검사
-        if(userRepository.existsByPhone(enrollDTO.getPhone())){
-            throw new CustomException("이미 등록된 번호입니다.");
+
+        Optional<User> latestWithdrawnUser = userRepository.findLatestWithdrawnByPhone(enrollDTO.getPhone());
+        if (latestWithdrawnUser.isPresent()) {
+            User withdrawnUser = latestWithdrawnUser.get();
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date withdrawalDate = sdf.parse(withdrawnUser.getWithdrawalDate());
+                long diffInMillies = Math.abs(new Date().getTime() - withdrawalDate.getTime());
+                long diffInDays = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+                if (diffInDays < 30) {
+                    throw new CustomException("재가입 가능 기간이 아닙니다. 재가입까지 " + (30 - diffInDays) + "일이 남았습니다.");
+                }
+            } catch (ParseException e) {
+                log.error("날짜 파싱 중 오류 발생", e);
+                throw new CustomException("날짜 처리 중 오류가 발생했습니다.");
+            }
         }
+
         try {
-            // User 객체 생성 및 저장
-            User user = enrollDTO.toUser(passwordEncoder);
-            return UserIdDTO.of(userRepository.save(user));
+            User user = User.builder()
+                    .userId(enrollDTO.getUserId())
+                    .password(passwordEncoder.encode(enrollDTO.getPassword()))
+                    .userName(enrollDTO.getUserName())
+                    .phone(enrollDTO.getPhone())
+                    .enrollDate(new Date())
+                    .userRole("user") // 'userRole' 필드에 기본값 "USER"을 명시적으로 설정
+                    .withdrawalStatus("N") // 'withdrawalStatus' 필드 설정은 그대로 유지
+                    .build();
+            userRepository.save(user);
+            return new UserIdDTO(user.getUserId());
         } catch (Exception e){
-            // 예외 발생 시 로깅 후 사용자 정의 예외를 던짐
             log.error("가입 에러 : ", e);
             throw new CustomException("가입 시도 중 오류가 발생했습니다");
         }
@@ -143,6 +169,31 @@ public class UserService {
         user.setUserName(updateDTO.getUserName());
         user.setPhone(updateDTO.getPhone());
         userRepository.save(user);
+    }
+
+    // 예시를 위한 userWithdrawal 메서드
+    @Transactional
+    public void userWithdrawal(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException("해당하는 회원 정보가 존재하지 않습니다"));
+        user.setWithdrawalStatus("Y");
+        String currentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        user.setWithdrawalDate(currentDateTime);
+        userRepository.save(user);
+    }
+
+    public Optional<User> findUserByStatus(String userId) {
+        return userRepository.findByUserId(userId)
+                .map(user -> {
+                    // 여기서는 추가적인 비즈니스 로직을 적용할 수 있습니다.
+                    // 예를 들어, 사용자 상태에 따라 다른 처리를 할 수 있습니다.
+                    return user;
+                });
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    public void deleteWithdrawnUsers() {
+        userRepository.deleteWithdrawnUsersOlderThanOneMonth();
     }
 
 
