@@ -89,4 +89,12 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setWithdrawalStatus(String withdrawalStatus) {
+        this.withdrawalStatus = withdrawalStatus;
+    }
+
+    public void setWithdrawalDate(String withdrawalDate) {
+        this.withdrawalDate = withdrawalDate;
+    }
 }
