@@ -1,7 +1,10 @@
 package respring.dorering.rest.auth.controller;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,9 @@ import respring.dorering.rest.auth.service.UserService;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
+    @Value("${jwt.secret}")
+    private String secretKey;
 
     private final UserService userService;
 
