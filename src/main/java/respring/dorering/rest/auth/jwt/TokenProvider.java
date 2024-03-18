@@ -52,6 +52,7 @@ public class TokenProvider {
         long now = (new Date()).getTime();
 
         Date tokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        log.info("tokenExpiresIn 확인 : {}", tokenExpiresIn);
 
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
