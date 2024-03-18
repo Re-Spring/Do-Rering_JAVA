@@ -4,7 +4,7 @@ CREATE TABLE `user_info` (
                              `user_code` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                              `name` VARCHAR(10),
                              `id` VARCHAR(20),
-                             `pwd` VARCHAR(20),
+                             `pwd` VARCHAR(255),
                              `phone` VARCHAR(20),
                              `role` VARCHAR(20),
                              `withdrawal_status` VARCHAR(20),
@@ -14,7 +14,7 @@ CREATE TABLE `user_info` (
 );
 
 CREATE TABLE `fairytale_info` (
-                                  `fairytale_code` INTEGER NOT NULL PRIMARY KEY,
+                                  `fairytale_code` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY ,
                                   `user_code` INTEGER NOT NULL,
                                   `fairytale_summary` VARCHAR(5000),
                                   `fairytale_title` VARCHAR(255),
@@ -24,7 +24,7 @@ CREATE TABLE `fairytale_info` (
                                   FOREIGN KEY (`user_code`) REFERENCES `user_info` (`user_code`)
 );
 CREATE TABLE `voice` (
-                         `voice_code` INTEGER NOT NULL PRIMARY KEY,
+                         `voice_code` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                          `fairytale_code` INTEGER NOT NULL,
                          `user_code` INTEGER NOT NULL,
                          FOREIGN KEY (`fairytale_code`) REFERENCES `fairytale_info` (`fairytale_code`),
@@ -35,10 +35,9 @@ CREATE TABLE `voice` (
 
 
 CREATE TABLE `Fairytale_video_info` (
-                                        `pro_video_code` INTEGER NOT NULL,
+                                        `video_file_code` INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                         `fairytale_code` INTEGER NOT NULL,
                                         `video_path` VARCHAR(255),
-                                        PRIMARY KEY (`pro_video_code`, `fairytale_code`),
                                         FOREIGN KEY (`fairytale_code`) REFERENCES `fairytale_info` (`fairytale_code`)
 );
 
