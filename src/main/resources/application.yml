@@ -19,3 +19,6 @@ jwt:
   key: eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9
   time: 86400000
   secret: eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0
+
+elevenlabs-api:
+  key: "2fae9a043baf5a1c42b9d7697c20e8ff"
