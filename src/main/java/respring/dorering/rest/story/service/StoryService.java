@@ -35,6 +35,6 @@ public class StoryService {
 
     // userCode를 기반으로 동화 리스트 조회
     public List<Story> getStoriesByUserCode(Integer userCode) {
-        return storyRepository.findByUserCode_UserCode(userCode);
+        return storyRepository.findByUser_UserCode(userCode);
     }
 }
