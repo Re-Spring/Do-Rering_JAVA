@@ -23,7 +23,7 @@ public class Story {
     // 이 필드는 관계 매핑을 위해 유지됩니다. 실제로는 user 객체를 통해 관련된 사용자 정보에 접근할 수 있습니다.
     @ManyToOne
     @JoinColumn(name = "user_code", referencedColumnName = "user_code")
-    private User userCode;
+    private User user; // 'userCode' 대신 'user'로 변경하여 관계를 더 명확하게 표현
 
     @Column(name = "fairytale_summary")
     private String fairytaleSummary;

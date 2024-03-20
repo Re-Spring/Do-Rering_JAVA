@@ -22,7 +22,7 @@ public class Voice {
     private String voiceId;
 
     @Builder
-    public Voice(Long no, String voiceId) {
+    public Voice(int no, String voiceId) {
         this.no = no;
         this.voiceId = voiceId;
     }
