@@ -35,6 +35,7 @@ public class StoryController {
     }
 
     // 사용자 ID로 해당 사용자가 만든 동화 리스트 조회
+    // user_code로 해당 코드와 일치하는 동화 리스트 조회
     @GetMapping("/usercode/{userCode}")
     public List<Story> getStoriesByUserCode(@PathVariable Integer userCode) {
         return storyService.getStoriesByUserCode(userCode);

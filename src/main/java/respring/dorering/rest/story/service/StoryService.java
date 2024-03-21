@@ -33,8 +33,14 @@ public class StoryService {
                 .orElseThrow(() -> new RuntimeException("Story not found with code: " + fairytaleCode));
     }
 
-    // userCode를 기반으로 동화 리스트 조회
     public List<Story> getStoriesByUserCode(Integer userCode) {
-        return storyRepository.findByUser_UserCode(userCode);
+        log.info("Fetching stories for userCode: {}", userCode); // 메소드 호출 로그
+        List<Story> stories = storyRepository.findByUserCode_UserCode(userCode);
+        if (stories.isEmpty()) {
+            log.info("No stories found for userCode: {}", userCode); // 결과가 비어 있을 경우
+        } else {
+            log.info("Found {} stories for userCode: {}", stories.size(), userCode); // 결과가 있을 경우
+        }
+        return stories;
     }
 }
