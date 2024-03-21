@@ -14,9 +14,9 @@ public interface StoryRepository extends JpaRepository<Story, Integer> {
     List<Story> findByFairytaleGenre(String fairytaleGenre);
 
     // 동화 코드를 사용하여 상세 정보를 조회하는 메서드
-    @Query("SELECT new respring.dorering.rest.story.dto.StoryDetailDTO(s.fairytaleCode, s.fairytaleTitle, s.fairytaleGenre, s.fairytaleThumb, s.fairytaleSummary, s.user.userId) FROM Story s WHERE s.fairytaleCode = :fairytaleCode")
+    @Query("SELECT new respring.dorering.rest.story.dto.StoryDetailDTO(s.fairytaleCode, s.fairytaleTitle, s.fairytaleGenre, s.fairytaleThumb, s.fairytaleSummary, s.userCode.userId) FROM Story s WHERE s.fairytaleCode = :fairytaleCode")
     Optional<StoryDetailDTO> findStoryDetailsWithUserId(@Param("fairytaleCode") Integer fairytaleCode);
 
     // user_code와 일치하는 동화 조회
-    List<Story> findByUser_UserCode(Integer userCode);
+    List<Story> findByUserCode_UserCode(Integer userCode);
 }
