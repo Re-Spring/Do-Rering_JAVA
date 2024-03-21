@@ -33,6 +33,7 @@ public class AdminController {
 
     @DeleteMapping("/deleteVoice/{voiceId}")
     public ResponseEntity<?> deleteExpVoiceId(@PathVariable String voiceId){
+        log.info("[AdminController] deleteExpVoiceId PathVariable : " + voiceId);
         boolean isSuccess = adminService.deleteExpVoiceId(voiceId);
         if(isSuccess) {
             log.info("[AdminController] deleteExpVoiceId : Voice ID successfully deleted.");

@@ -25,7 +25,7 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
     private final ModelMapper modelMapper;
-    private ApiKeyConfiguration apiConfiguration;
+    private final ApiKeyConfiguration apiConfiguration;
 
     public List<VoiceDTO> selectAllExpiredVoices() {
         List<Voice> allExpVoices = adminRepository.findAll();
@@ -39,11 +39,13 @@ public class AdminService {
     }
 
     public boolean deleteExpVoiceId(String voiceId) {
+        log.info("[AdminService] deleteExpVoiceId key : " + apiConfiguration.getElevenKey());
         try {
             HttpResponse<String> response = Unirest.delete("https://api.elevenlabs.io/v1/voices/" + voiceId)
                     .header("xi-api-key", apiConfiguration.getElevenKey())
                     .asString();
-            if(response.getStatusText().equals("ok")){
+            log.info("[AdminService] deleteExpVoiceId HttpResponse : " + response.getBody());
+            if(response.getStatus() == 200){
                 adminRepository.deleteByVoiceId(voiceId);
                 return true;
             } else {
