@@ -38,6 +38,4 @@ public class Story {
     private String fairytaleThumb;
 
 
-
-    // 여기서 userCode 필드를 제거하였습니다. 필요한 경우 user 엔티티를 통해 접근 가능합니다.
 }

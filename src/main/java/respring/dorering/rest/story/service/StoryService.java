@@ -20,11 +20,23 @@ public class StoryService {
     }
 
     public List<Story> getAllStories() {
-        return storyRepository.findAll(); // 모든 스토리를 조회합니다.
+        return storyRepository.findAllByOrderByFairytaleCodeDesc(); // 모든 스토리를 조회합니다.
+    }
+
+    public List<Story> getStoriesByAdminRole() {
+        return storyRepository.findStoriesByAdminRole();
+    }
+
+    public List<Story> getStoriesByUserRole() {
+        return storyRepository.findStoriesByUserRole();
     }
 
     public List<Story> getStoriesByGenre(String genre) {
         return storyRepository.findByFairytaleGenre(genre); // 장르별로 스토리를 조회합니다.
+    }
+
+    public List<Story> getStoriesByGenreAndUserRole(String genre) {
+        return storyRepository.findByFairytaleGenreAndUserRole(genre);
     }
 
     public StoryDetailDTO getStoryDetails(Integer fairytaleCode) {
