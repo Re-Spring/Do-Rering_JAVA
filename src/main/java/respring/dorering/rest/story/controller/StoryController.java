@@ -23,10 +23,24 @@ public class StoryController {
         return storyService.getAllStories(); // StoryService를 통해 모든 이야기를 조회하고 결과를 반환합니다.
     }
 
-    @GetMapping("/genre/{genre}") // HTTP GET 요청을 '/stories/genre/{genre}' URL로 매핑합니다. 여기서 {genre}는 변수로, 장르에 따라 다른 결과를 조회할 수 있습니다.
-    public List<Story> getStoriesByGenre(@PathVariable String genre) { // @PathVariable을 사용해 URL의 {genre} 부분을 메서드의 인자로 사용합니다.
-        return storyService.getStoriesByGenre(genre); // 해당 장르의 이야기를 조회하여 반환합니다.
+    // 'admin' 역할 사용자의 동화 조회
+    @GetMapping("/role/admin")
+    public List<Story> getStoriesByAdminRole() {
+        return storyService.getStoriesByAdminRole();
     }
+
+    // 'user' 역할 사용자의 동화 조회
+    @GetMapping("/role/user")
+    public List<Story> getStoriesByUserRole() {
+        return storyService.getStoriesByUserRole();
+    }
+
+    @GetMapping("/genre/{genre}")
+    public List<Story> getStoriesByGenre(@PathVariable String genre) {
+        return storyService.getStoriesByGenreAndUserRole(genre); // 수정된 메소드 호출
+    }
+
+
 
     @GetMapping("/{fairytaleCode}") // HTTP GET 요청을 '/stories/{fairytaleCode}' URL로 매핑합니다. 여기서 {fairytaleCode}는 동화 코드를 나타내는 변수입니다.
     public ResponseEntity<StoryDetailDTO> getStoryDetails(@PathVariable Integer fairytaleCode) { // @PathVariable을 사용해 URL의 {fairytaleCode} 부분을 메서드의 인자로 사용합니다.
