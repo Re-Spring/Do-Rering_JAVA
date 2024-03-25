@@ -1,5 +1,8 @@
 package respring.dorering.rest.CustomerService.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +23,26 @@ public class CustomerServicePostService {
         this.customerServicePostRepository = customerServicePostRepository;
     }
 
-    public List<CustomerServicePost> findAllPosts() {
-        return customerServicePostRepository.findAll();
+    // 수정할 부분: 서비스 메소드에 Pageable 파라미터 추가
+    public Page<CustomerServicePost> findAllPosts(Pageable pageable) {
+        return customerServicePostRepository.findAll(pageable);
     }
 
     public Optional<CustomerServicePost> findPostById(Integer id) {
         return customerServicePostRepository.findById(id);
+    }
+
+    // 게시글과 댓글을 포함하여 반환하는 메소드
+    public Optional<CustomerServicePostDto> findPostWithCommentsById(Integer boardCode) {
+        Optional<CustomerServicePost> postOptional = customerServicePostRepository.findById(boardCode);
+        if (postOptional.isPresent()) {
+            CustomerServicePost post = postOptional.get();
+            CustomerServicePostDto postDto = convertToDto(post);
+            // TODO: 댓글 정보를 postDto에 추가하는 로직 구현
+            // 예: postDto.setComments(commentRepository.findByPostId(post.getBoardCode()));
+            return Optional.of(postDto);
+        }
+        return Optional.empty();
     }
 
     @Transactional
@@ -47,18 +64,22 @@ public class CustomerServicePostService {
     }
 
     @Transactional
-    public CustomerServicePost updatePost(Integer id, CustomerServicePost postUpdateRequest) {
-        CustomerServicePost existingPost = customerServicePostRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다: " + id));
+    public CustomerServicePost updatePost(Integer boardCode, CustomerServicePost postUpdateRequest) {
+        CustomerServicePost existingPost = findPostById(boardCode)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + boardCode));
         existingPost.setTitle(postUpdateRequest.getTitle());
         existingPost.setContent(postUpdateRequest.getContent());
         return customerServicePostRepository.save(existingPost);
     }
 
     @Transactional
-    public void deletePost(Integer id) {
-        customerServicePostRepository.deleteById(id);
+    public void deletePost(Integer boardCode) {
+        if (!customerServicePostRepository.existsById(boardCode)) {
+            throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + boardCode);
+        }
+        customerServicePostRepository.deleteById(boardCode);
     }
+
 
     /**
      * user_code를 기반으로 특정 게시글을 조회하는 메서드입니다.
