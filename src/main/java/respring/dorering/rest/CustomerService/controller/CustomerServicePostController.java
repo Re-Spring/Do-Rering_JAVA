@@ -1,5 +1,8 @@
 package respring.dorering.rest.CustomerService.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import respring.dorering.rest.CustomerService.dto.CustomerServicePostDto;
 import respring.dorering.rest.CustomerService.entity.CustomerServicePost;
 import respring.dorering.rest.CustomerService.service.CustomerServicePostService;
@@ -7,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/customer-service-posts")
@@ -21,9 +25,17 @@ public class CustomerServicePostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CustomerServicePost>> getAllPosts() {
-        List<CustomerServicePost> posts = customerServicePostService.findAllPosts();
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<Map<String, Object>> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<CustomerServicePost> postPage = customerServicePostService.findAllPosts(pageable);
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", postPage.getContent());
+        response.put("currentPage", postPage.getNumber());
+        response.put("totalItems", postPage.getTotalElements());
+        response.put("totalPages", postPage.getTotalPages());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
@@ -32,24 +44,24 @@ public class CustomerServicePostController {
         return ResponseEntity.ok(createdPost);
     }
 
-    @GetMapping("/{user_code}")
-    public ResponseEntity<CustomerServicePostDto> getUserCodePost(@PathVariable Integer user_code) {
-        return customerServicePostService.findPostByUserCode(user_code)
+    @GetMapping("/{boardCode}")
+    public ResponseEntity<CustomerServicePost> getPostByBoardCode(@PathVariable Integer boardCode) {
+        return customerServicePostService.findPostById(boardCode)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{user_code}")
+    @PutMapping("/{boardCode}")
     public ResponseEntity<CustomerServicePost> updatePost(
-            @PathVariable Integer user_code,
+            @PathVariable Integer boardCode,
             @RequestBody CustomerServicePost postUpdateRequest) {
-        CustomerServicePost updatedPost = customerServicePostService.updatePost(user_code, postUpdateRequest);
+        CustomerServicePost updatedPost = customerServicePostService.updatePost(boardCode, postUpdateRequest);
         return ResponseEntity.ok(updatedPost);
     }
 
-    @DeleteMapping("/{user_code}")
-    public ResponseEntity<Void> deletePost(@PathVariable Integer user_code) {
-        customerServicePostService.deletePost(user_code);
+    @DeleteMapping("/{boardCode}")
+    public ResponseEntity<Void> deletePost(@PathVariable Integer boardCode) {
+        customerServicePostService.deletePost(boardCode);
         return ResponseEntity.ok().build();
     }
 }

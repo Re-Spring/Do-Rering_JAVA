@@ -1,5 +1,6 @@
 package respring.dorering.rest.CustomerService.dto;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,32 +11,22 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Builder
 public class CustomerServicePostDto {
-    private Long boardCode; // 게시글의 고유 식별자입니다.
+    private Integer boardCode; // 게시글의 고유 식별자입니다.
     private String title; // 게시글의 제목입니다.
     private String content; // 게시글의 내용입니다.
     private LocalDateTime postedDate; // 게시글이 게시된 날짜와 시간입니다.
-    private int userCode; // 게시글을 작성한 사용자의 코드입니다.
+    private Integer userCode; // 게시글을 작성한 사용자의 코드입니다.
     private LocalDateTime commentDate;
-    private int comment;
+    private Integer comment;
 
     // 기본 생성자
     public CustomerServicePostDto(Integer boardCode, String title, String content, LocalDateTime postedDate, Integer userCode) {
     }
-
-    // 모든 필드를 포함하는 생성자
-    public CustomerServicePostDto(Long boardCode, String title, String content, LocalDateTime postedDate, int userCode, LocalDateTime commentDate, int comment) {
-        this.boardCode = boardCode;
-        this.title = title;
-        this.content = content;
-        this.postedDate = postedDate;
-        this.userCode = userCode;
-        this.commentDate = commentDate;
-        this.comment = comment;
-    }
-
 
 
 }
