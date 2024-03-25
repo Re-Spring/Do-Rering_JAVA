@@ -20,7 +20,6 @@ public class Story {
     @Column(name = "fairytale_code")
     private Integer fairytaleCode;
 
-    // 이 필드는 관계 매핑을 위해 유지됩니다. 실제로는 user 객체를 통해 관련된 사용자 정보에 접근할 수 있습니다.
     @ManyToOne
     @JoinColumn(name = "user_code", referencedColumnName = "user_code")
     private User userCode;
@@ -37,5 +36,7 @@ public class Story {
     @Column(name = "fairytale_thumb")
     private String fairytaleThumb;
 
-
+    @OneToOne // 또는 @ManyToOne 데이터 모델에 따라
+    @JoinColumn(name = "video_file_code", referencedColumnName = "video_file_code")
+    private FairytaleVideoInfo videoInfo;
 }
