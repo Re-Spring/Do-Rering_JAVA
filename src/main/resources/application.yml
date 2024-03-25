@@ -22,3 +22,11 @@ jwt:
 
 elevenlabs-api:
   key: "2fae9a043baf5a1c42b9d7697c20e8ff"
+
+image:
+  #WebConfig에 세팅
+  add-resource-location: file:///C:/Users/USER/Desktop/Project/DoRing/src/main/resources/static/
+  add-resource-handler: /images/**
+  # 파일 업로드 경로
+  image-dir: C:/Users/USER/Desktop/Project/DoRing/src/main/resources/static/images/
+  image-url: http://dorering.com:8001/images/
