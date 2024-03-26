@@ -29,7 +29,6 @@ public class SearchController {
     public ResponseEntity<List<SearchDTO>> search(@RequestParam String keyword) {
         // 검색 서비스를 호출하여 검색 결과를 가져옵니다.
         List<SearchDTO> searchResults = searchService.searchByKeyword(keyword);
-        log.info(String.valueOf(searchResults));
         // 결과를 HTTP 응답 본문에 담아 반환합니다.
         return ResponseEntity.ok(searchResults);
     }

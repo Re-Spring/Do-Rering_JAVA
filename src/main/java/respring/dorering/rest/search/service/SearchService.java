@@ -24,7 +24,6 @@ public class SearchService {
     public List<SearchDTO> searchByKeyword(String keyword) {
         // 제목에 키워드를 포함하는 모든 동화를 검색합니다.
         List<FairyTale> fairyTales = searchRepository.findByTitleContaining(keyword);
-        log.info(fairyTales.toString());
 
         // 검색 결과를 DTO 리스트로 변환하여 반환합니다.
         return fairyTales.stream()

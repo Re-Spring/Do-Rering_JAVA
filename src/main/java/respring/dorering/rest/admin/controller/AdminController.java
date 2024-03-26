@@ -20,23 +20,20 @@ public class AdminController {
 
     @GetMapping("/expVoice")
     public ResponseEntity<List<VoiceDTO>> selectAllExpiredVoices(){
-
+        log.info("[AdminController] selectAllExpiredVoices start");
         try {
             List<VoiceDTO> allExpVoices = adminService.selectAllExpiredVoices();
-            log.info("[AdminController] selectAllExpiredVoices allExpVoices : " + allExpVoices);
             return ResponseEntity.ok(allExpVoices);
         } catch (Exception e) {
-            log.error("[AdminController] selectAllExpiredVoices error : " + e);
             throw new CustomException("An error occurs at AdminController selectAllExpiredVoices");
         }
     }
 
     @DeleteMapping("/deleteVoice/{voiceId}")
     public ResponseEntity<?> deleteExpVoiceId(@PathVariable String voiceId){
-        log.info("[AdminController] deleteExpVoiceId PathVariable : " + voiceId);
+        log.info("[AdminController] deleteExpVoiceId start");
         boolean isSuccess = adminService.deleteExpVoiceId(voiceId);
         if(isSuccess) {
-            log.info("[AdminController] deleteExpVoiceId : Voice ID successfully deleted.");
             return ResponseEntity.ok().body("Voice ID successfully deleted.");
         } else {
             throw new CustomException("An error occurs at AdminController deleteExpVoiceId");

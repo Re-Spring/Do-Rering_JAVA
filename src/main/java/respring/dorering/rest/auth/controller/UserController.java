@@ -29,7 +29,7 @@ public class UserController {
 
     @PostMapping("/enroll")
     public ResponseEntity<UserIdDTO> userEnroll(@RequestBody UserEnrollDTO enrollDTO) {
-        log.info("요청과 넘어온 데이터 확인 : "+ enrollDTO);
+        log.info("[UserController] userEnroll start");
         return ResponseEntity.ok(userService.userEnroll(enrollDTO));
     }
 
@@ -38,30 +38,26 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST) // HTTP 상태 코드 400으로 응답
     public String handleCustomException(CustomException ex) {
         // 예외 메시지를 반환하여 클라이언트에게 전달
-        log.info(ex.getMessage());
         return ex.getMessage();
     }
 
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> userLogin(@RequestBody UserEnrollDTO userDTO) {
-        log.info("컨트롤러 유저DTO 확인 : {}", userDTO.getUserId());
-        log.info("컨트롤러 유저DTO 객체 확인 : {}", userDTO);
+        log.info("[UserController] userLogin start");
         TokenDTO tokenDTO = userService.userLogin(userDTO);
-        log.info("토큰 확인 : {}", tokenDTO);
 
         if(tokenDTO != null) {
                 return ResponseEntity.ok(tokenDTO);
         } else {
-            log.info(String.valueOf(tokenDTO));
             throw new CustomException("로그인 시도 중 오류가 발생했습니다");
         }
     }
 
     @GetMapping("/findId/{userName}/{phoneNum}")
     public ResponseEntity<String> findUserId(@PathVariable String userName, @PathVariable String phoneNum) {
+        log.info("[UserController] findUserId start");
         User user = userService.findUserId(userName, phoneNum);
         if(user != null && user.getUserId() != null) {
-            log.info(String.valueOf(user));
             return ResponseEntity.ok(user.getUserId());
         } else {
             throw new CustomException("회원 정보를 찾을 수 없습니다");
@@ -70,6 +66,7 @@ public class UserController {
 
     @GetMapping("/findPw/{userName}/{userId}/{phoneNum}")
     public ResponseEntity<?> findPassword(@PathVariable String userName, @PathVariable String userId, @PathVariable String phoneNum) {
+        log.info("[UserController] findPassword start");
         User user = userService.findPassword(userName, userId, phoneNum);
         if(user != null && user.getUserId() != null) {
             return ResponseEntity.status(HttpStatus.OK).body("user 확인");
@@ -80,30 +77,32 @@ public class UserController {
 
     @PostMapping("/setPwd")
     public ResponseEntity<?> setNewPassword(@RequestParam String userId, @RequestParam String newPassword) {
-        log.info(userId, newPassword);
+        log.info("[UserController] setNewPassword start");
         try {
             userService.setNewPassword(userId, newPassword);
             return ResponseEntity.ok("password 변경 완료");
         } catch (Exception e) {
-            log.info("비밀번호 찾기 controller 오류 : " + e);
             throw new CustomException("비밀번호 변경 중 오류가 발생했습니다");
         }
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
+        log.info("[UserController] updateUser start");
         userService.updateUser(updateUserDTO);
         return ResponseEntity.ok("User information updated successfully");
     }
 
     @DeleteMapping("/withdrawal/{userId}")
     public ResponseEntity<?> userWithdrawal(@PathVariable String userId) {
+        log.info("[UserController] userWithdrawal start");
         userService.userWithdrawal(userId);
         return ResponseEntity.ok("회원 탈퇴 처리가 완료되었습니다.");
     }
 
     @GetMapping("/status/{userId}")
     public ResponseEntity<?> checkUserStatus(@PathVariable String userId) {
+        log.info("[UserController] checkUserStatus start");
         return userService.findUserByStatus(userId)
                 .map(user -> ResponseEntity.ok().body(user.getWithdrawalStatus()))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));

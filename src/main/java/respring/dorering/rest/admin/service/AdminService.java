@@ -39,21 +39,17 @@ public class AdminService {
     }
 
     public boolean deleteExpVoiceId(String voiceId) {
-        log.info("[AdminService] deleteExpVoiceId key : " + apiConfiguration.getElevenKey());
         try {
             HttpResponse<String> response = Unirest.delete("https://api.elevenlabs.io/v1/voices/" + voiceId)
                     .header("xi-api-key", apiConfiguration.getElevenKey())
                     .asString();
-            log.info("[AdminService] deleteExpVoiceId HttpResponse : " + response.getBody());
             if(response.getStatus() == 200){
                 adminRepository.deleteByVoiceId(voiceId);
                 return true;
             } else {
-                log.info("[AdminService] deleteExpVoiceId error at HttpResponse");
                 return false;
             }
         } catch (Exception e) {
-            log.error("[AdminService] deleteExpVoiceId error : " + e);
             return false;
         }
     }

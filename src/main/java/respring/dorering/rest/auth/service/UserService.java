@@ -69,7 +69,6 @@ public class UserService {
             userRepository.save(user);
             return new UserIdDTO(user.getUserId());
         } catch (Exception e){
-            log.error("가입 에러 : ", e);
             throw new CustomException("가입 시도 중 오류가 발생했습니다");
         }
     }
@@ -77,7 +76,6 @@ public class UserService {
     public TokenDTO userLogin(UserEnrollDTO userDTO){
         // 사용자 ID로 사용자 정보를 레포지토리에서 조회
         Optional<User> optionalUser = userRepository.findByUserId(userDTO.getUserId());
-        log.info(String.valueOf(optionalUser));
 
         // optionalUser가 존재하는지 (db에 사용자가 있는지) 확인
         if(optionalUser.isPresent()){
@@ -130,7 +128,6 @@ public class UserService {
         try {
             return userRepository.findUserByUserNameAndPhone(userName, phoneNum);
         } catch (Exception e){
-            log.error("아이디 찾기 에러 : ", e);
             throw new CustomException("회원 정보를 찾을 수 없습니다");
         }
     }
@@ -139,7 +136,6 @@ public class UserService {
         try {
             return userRepository.findUserByUserNameAndUserIdAndPhone(userName, userId, phoneNum);
         } catch (Exception e){
-            log.error("비밀번호 찾기 에러 : ", e);
             throw new CustomException("회원 정보를 찾을 수 없습니다");
         }
     }
@@ -150,7 +146,6 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
         } catch (Exception e){
-            log.error("비밀번호 변경 에러 : ", e);
             throw new CustomException("비밀번호 변경 중 오류가 발생했습니다");
         }
     }
