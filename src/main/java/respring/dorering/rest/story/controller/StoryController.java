@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import respring.dorering.rest.story.dto.StoryDetailDTO;
 import respring.dorering.rest.story.entity.Story;
 import respring.dorering.rest.story.service.StoryService;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -54,5 +57,17 @@ public class StoryController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(stories);
+    }
+
+    // 비디오 경로 조회 엔드포인트
+    @GetMapping("/video/{videoFileCode}")
+    public ResponseEntity<?> getVideoPathByVideoFileCode(@PathVariable Integer videoFileCode) {
+        return storyService.findVideoPathByVideoFileCode(videoFileCode)
+                .map(path -> {
+                    Map<String, String> response = new HashMap<>();
+                    response.put("videoPath", path);
+                    return ResponseEntity.ok().body(response);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

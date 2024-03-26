@@ -1,5 +1,7 @@
 package respring.dorering.rest.story.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,14 +17,14 @@ import lombok.Setter;
 public class FairytaleVideoInfo {
 
     @Id
-    @Column(name = "video_file_code")
-    private String videoFileCode;
+    private Integer videoFileCode;
 
     @Column(name = "video_path")
     private String videoPath;
 
-    @ManyToOne // 또는 @OneToOne, 관계 타입에 따라
+    @OneToOne
     @JoinColumn(name = "fairytale_code", referencedColumnName = "fairytale_code")
+    @JsonIgnore
     private Story story;
 
 
