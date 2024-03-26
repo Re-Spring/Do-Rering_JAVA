@@ -1,5 +1,6 @@
 package respring.dorering.rest.story.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,10 @@ public class Story {
     @JoinColumn(name = "user_code", referencedColumnName = "user_code")
     private User userCode;
 
+    @OneToOne(mappedBy = "story", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private FairytaleVideoInfo videoInfo;
+
     @Column(name = "fairytale_summary")
     private String fairytaleSummary;
 
@@ -35,8 +40,4 @@ public class Story {
 
     @Column(name = "fairytale_thumb")
     private String fairytaleThumb;
-
-    @OneToOne // 또는 @ManyToOne 데이터 모델에 따라
-    @JoinColumn(name = "video_file_code", referencedColumnName = "video_file_code")
-    private FairytaleVideoInfo videoInfo;
 }

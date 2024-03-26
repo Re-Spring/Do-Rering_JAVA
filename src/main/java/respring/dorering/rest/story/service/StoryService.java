@@ -1,23 +1,25 @@
 package respring.dorering.rest.story.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import respring.dorering.rest.story.dto.StoryDetailDTO;
 import respring.dorering.rest.story.entity.FairytaleVideoInfo;
 import respring.dorering.rest.story.entity.Story;
-import respring.dorering.rest.story.repository.FairytaleVideoInfoRepository;
 import respring.dorering.rest.story.repository.StoryRepository;
+import respring.dorering.rest.story.repository.VideoRepository;
+
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class StoryService {
     private final StoryRepository storyRepository;
-    private final FairytaleVideoInfoRepository videoInfoRepository;
+    private final VideoRepository videoRepository;
 
-    public StoryService(StoryRepository storyRepository, FairytaleVideoInfoRepository videoInfoRepository) {
+    // 생성자를 통한 의존성 주입
+    public StoryService(StoryRepository storyRepository, VideoRepository videoRepository) {
         this.storyRepository = storyRepository;
-        this.videoInfoRepository = videoInfoRepository;}
+        this.videoRepository = videoRepository;
+    }
 
     public List<Story> getAllStories() {
         return storyRepository.findAllByOrderByFairytaleCodeDesc();
@@ -43,21 +45,17 @@ public class StoryService {
         return storyRepository.findStoriesByUserCode(userCode);
     }
 
-    // 동화 생성 로직에 비디오 정보 처리 추가
-    @Transactional
-    public Story createStoryWithVideo(Story story, String videoPath) {
-        // Story 엔티티 저장 (처음에는 videoInfo 없이 저장)
-        Story savedStory = storyRepository.save(story);
+    // 비디오 파일 코드를 기반으로 비디오 경로 조회
+    // 비디오 파일 코드를 기반으로 비디오 경로 조회
+    public Optional<String> getVideoPathByFileCode(Integer videoFileCode) {
+        return videoRepository.findById(videoFileCode)
+                .map(FairytaleVideoInfo::getVideoPath); // 비디오 경로를 조회합니다.
+    }
 
-        // 비디오 정보 생성 및 저장
-        FairytaleVideoInfo videoInfo = new FairytaleVideoInfo();
-        // videoInfo.setVideoFileCode(); // 필요하다면 여기서 설정
-        videoInfo.setVideoPath(videoPath);
-        videoInfo.setStory(savedStory); // Story 엔티티와의 연결 설정
-        FairytaleVideoInfo savedVideoInfo = videoInfoRepository.save(videoInfo);
-
-        // 저장된 비디오 정보를 Story 엔티티에 설정하고 업데이트
-        savedStory.setVideoInfo(savedVideoInfo);
-        return storyRepository.save(savedStory); // 변경된 사항을 다시 저장
+    // videoFileCode를 사용하여 videoPath 조회
+    // 비디오 파일 코드를 사용하여 비디오 경로 조회
+    public Optional<String> findVideoPathByVideoFileCode(Integer videoFileCode) {
+        return videoRepository.findById(videoFileCode)
+                .map(FairytaleVideoInfo::getVideoPath);
     }
 }

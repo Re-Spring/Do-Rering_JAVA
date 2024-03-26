@@ -21,7 +21,7 @@ public interface StoryRepository extends JpaRepository<Story, Integer> {
     List<Story> findAllByOrderByFairytaleCodeDesc();
 
     // StoryRepository.java 내 수정 필요한 부분
-    @Query("SELECT new respring.dorering.rest.story.dto.StoryDetailDTO(s.fairytaleCode, s.fairytaleTitle, s.fairytaleGenre, s.fairytaleThumb, s.fairytaleSummary, u.userId, v.videoPath) FROM Story s JOIN s.userCode u LEFT JOIN s.videoInfo v WHERE s.fairytaleCode = :fairytaleCode")
+    @Query("SELECT new respring.dorering.rest.story.dto.StoryDetailDTO(s.fairytaleCode, s.fairytaleTitle, s.fairytaleGenre, s.fairytaleThumb, s.fairytaleSummary, u.userId, v.videoFileCode) FROM Story s JOIN s.userCode u LEFT JOIN s.videoInfo v WHERE s.fairytaleCode = :fairytaleCode")
     Optional<StoryDetailDTO> findStoryByFairytaleCode(@Param("fairytaleCode") Integer fairytaleCode);
 
     @Query("SELECT s FROM Story s WHERE s.userCode.userCode = :userCode")
